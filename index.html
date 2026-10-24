@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f6f1">
+<title>回復ログ｜コンディション記録</title>
+<style>
+:root{color-scheme:light dark;--bg:#f4f6f1;--panel:#ffffff;--ink:#202b28;--muted:#687671;--line:#dfe5de;--green:#246b55;--green2:#dceee5;--amber:#a9681d;--red:#b34848;--radius:18px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45}
+.app{max-width:780px;margin:auto;padding:20px 16px 44px}
+header{padding:8px 2px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.eyebrow{font-size:12px;letter-spacing:.12em;color:var(--green);font-weight:800}
+h1{font-size:28px;line-height:1.15;margin:5px 0 0;letter-spacing:-.04em}
+.datepill{font-size:12px;color:var(--muted);background:var(--panel);border:1px solid var(--line);padding:9px 11px;border-radius:999px;white-space:nowrap}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:0 4px 16px #1c342008}
+.panelhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+h2{font-size:16px;margin:0;font-weight:800}
+.small{font-size:12px;color:var(--muted)}
+label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.field{min-width:0}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px 12px;min-height:44px}
+input[type=range]{padding:0;min-height:24px;accent-color:var(--green)}
+input[type=checkbox]{width:18px;min-height:18px;accent-color:var(--green)}
+.rangehead{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.val{font-weight:800;color:var(--green);font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:flex;align-items:center;gap:7px;border:1px solid var(--line);padding:9px 11px;border-radius:12px;font-size:13px}
+.chip label{margin:0}
+.btnrow{display:flex;gap:9px;flex-wrap:wrap}
+button{font:inherit;border:0;border-radius:12px;padding:12px 15px;font-weight:800;cursor:pointer;min-height:44px}
+.primary{background:var(--green);color:#fff;flex:1}
+.secondary{background:var(--green2);color:var(--green)}
+.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.result{background:#e7f3eb;border:1px solid #cce3d4;border-radius:15px;padding:16px}
+.result.rest{background:#f9e9e6;border-color:#efd0cb}.result.light{background:#fff2db;border-color:#f0dfb9}
+.resulttop{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.recommend{font-size:22px;font-weight:900;letter-spacing:-.03em}
+.status{font-size:11px;letter-spacing:.05em;font-weight:900;padding:6px 9px;background:#ffffffa8;border-radius:999px}
+.result p{font-size:13px;margin:8px 0 0}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:13px}
+.stat{padding:11px;border:1px solid var(--line);border-radius:13px}
+.stat .k{font-size:11px;color:var(--muted)}.stat .v{font-size:20px;font-weight:900;margin-top:3px}
+.chartwrap{height:180px;width:100%;overflow:hidden}
+svg{width:100%;height:100%;display:block}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:8px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:var(--green)}
+.history{display:flex;flex-direction:column;gap:8px}
+.historyrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
+.historyrow:last-child{border-bottom:0}
+.historydate{font-weight:800;font-size:13px}.historymeta{font-size:11px;color:var(--muted);margin-top:3px}
+.tag{font-size:11px;font-weight:800;padding:6px 8px;border-radius:999px;background:var(--green2);color:var(--green);white-space:nowrap}
+.tag.rest{background:#f9e9e6;color:var(--red)}.tag.light{background:#fff2db;color:var(--amber)}
+.empty{font-size:13px;color:var(--muted);padding:16px 0}
+footer{font-size:11px;color:var(--muted);line-height:1.65;padding:4px 3px}
+@media(max-width:430px){.app{padding:14px 12px 32px}.panel{padding:15px}.grid{gap:12px}.recommend{font-size:20px}h1{font-size:25px}.datepill{font-size:11px;padding:8px}}
+@media(prefers-color-scheme:dark){:root{--bg:#121916;--panel:#1b2420;--ink:#e7eee9;--muted:#a0aea6;--line:#34423a;--green:#82c7a5;--green2:#263e32;--amber:#e2b36e;--red:#ed9690}.result{background:#20372a;border-color:#355744}.result.rest{background:#3b2525;border-color:#603b3b}.result.light{background:#3b3020;border-color:#65502e}.status{background:#101713aa}button.primary{color:#102017}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div><div class="eyebrow">DAILY RECOVERY CHECK</div><h1>回復ログ</h1></div>
+  <div class="datepill" id="todayPill">毎日のコンディション</div>
+</header>
+<section class="panel">
+  <div class="panelhead"><h2>今日のコンディション</h2><span class="small">Garmin＋体感</span></div>
+  <form id="entryForm">
+    <div class="grid">
+      <div class="field"><label for="date">記録日</label><input id="date" type="date" required></div>
+      <div class="field"><label for="hrv">HRV（ms）</label><input id="hrv" type="number" min="1" max="300" step="1" placeholder="例：48"></div>
+      <div class="field"><label for="rhr">安静時心拍（bpm）</label><input id="rhr" type="number" min="25" max="180" placeholder="例：55"></div>
+      <div class="field"><label for="sleep">睡眠時間（時間）</label><input id="sleep" type="number" min="0" max="24" step="0.25" placeholder="例：7.5"></div>
+    </div>
+    <div style="height:16px"></div>
+    <div class="field">
+      <div class="rangehead"><label for="sleepQuality">睡眠の質</label><span class="val" id="sleepQualityVal">3 / 5</span></div>
+      <input id="sleepQuality" type="range" min="1" max="5" value="3">
+      <div class="small">1＝かなり悪い　／　5＝とても良い</div>
+    </div>
+    <div style="height:16px"></div>
+    <div class="grid">
+      <div class="field"><div class="rangehead"><label for="fatigue">全身の疲労感</label><span class="val" id="fatigueVal">3 / 10</span></div><input id="fatigue" type="range" min="0" max="10" value="3"><div class="small">0＝なし　／　10＝限界</div></div>
+      <div class="field"><div class="rangehead"><label for="soreness">筋肉痛</label><span class="val" id="sorenessVal">2 / 10</span></div><input id="soreness" type="range" min="0" max="10" value="2"><div class="small">0＝なし　／　10＝強い</div></div>
+    </div>
+    <div style="height:16px"></div>
+    <div class="field">
+      <label for="performance">いつものトレーニングと比べて</label>
+      <select id="performance"><option value="same">いつも通り</option><option value="better">調子が良い</option><option value="worse">少し力が出ない</option><option value="muchworse">明らかに力が出ない</option></select>
+    </div>
+    <div style="height:14px"></div>
+    <div class="field"><label>体調不良のサイン</label><div class="chips">
+      <div class="chip"><input id="symptom" type="checkbox"><label for="symptom">発熱・風邪症状など</label></div>
+      <div class="chip"><input id="pain" type="checkbox"><label for="pain">いつもと違う痛み</label></div>
+    </div></div>
+    <div style="height:14px"></div>
+    <div class="field"><label for="notes">メモ（任意）</label><textarea id="notes" rows="2" placeholder="例：仕事が忙しかった／夜中に目が覚めた"></textarea></div>
+    <div style="height:16px"></div>
+    <div class="btnrow"><button class="primary" type="submit" id="saveBtn">今日の記録を保存</button><button class="ghost" type="button" id="clearBtn">入力をクリア</button></div>
+  </form>
+</section>
+<section class="panel">
+  <div class="panelhead"><h2>今日のトレーニング目安</h2><span class="small">複数のサインで判定</span></div>
+  <div class="result" id="resultBox"><div class="resulttop"><div class="recommend" id="recommend">通常メニュー</div><div class="status" id="status">準備中</div></div><p id="reason">記録を入力すると、今日の目安を表示します。</p></div>
+  <div class="stats">
+    <div class="stat"><div class="k">回復サイン</div><div class="v" id="positiveCount">—</div></div>
+    <div class="stat"><div class="k">注意サイン</div><div class="v" id="warningCount">—</div></div>
+    <div class="stat"><div class="k">連続記録</div><div class="v" id="streak">0日</div></div>
+  </div>
+</section>
+<section class="panel">
+  <div class="panelhead"><h2>直近7日間</h2><span class="small">疲労感・筋肉痛</span></div>
+  <div class="chartwrap"><svg id="chart" viewBox="0 0 340 170" role="img" aria-label="直近7日間の疲労感と筋肉痛のグラフ"></svg></div>
+  <div class="legend"><span><i class="dot"></i>疲労感</span><span><i class="dot" style="background:#d7a24b"></i>筋肉痛</span></div>
+</section>
+<section class="panel">
+  <div class="panelhead"><h2>記録履歴</h2><button type="button" class="secondary" id="deleteAll" style="padding:8px 10px;font-size:12px">全記録を削除</button></div>
+  <div class="history" id="history"><div class="empty">まだ記録がありません。</div></div>
+</section>
+<footer>このアプリは記録をこのブラウザ内に保存します。サーバーには送信しません。ブラウザのデータ消去・端末変更などで記録が失われる場合があります。判定は目安で、医療的な診断ではありません。発熱や普段と違う痛み、強い体調不良がある場合は運動を休み、必要に応じて医療機関に相談してください。</footer>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const fields=['date','hrv','rhr','sleep','sleepQuality','fatigue','soreness','performance','symptom','pain','notes'];
+const KEY='recovery-log-v1';
+let records=loadRecords(), editingDate=null;
+function localDate(d=new Date()){const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10)}
+function loadRecords(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return {}}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(records));return true}catch(e){alert('保存できませんでした。ブラウザの空き容量やプライベートブラウズ設定を確認してください。');return false}}
+function getForm(){return {date:$('date').value,hrv:num('hrv'),rhr:num('rhr'),sleep:num('sleep'),sleepQuality:+$('sleepQuality').value,fatigue:+$('fatigue').value,soreness:+$('soreness').value,performance:$('performance').value,symptom:$('symptom').checked,pain:$('pain').checked,notes:$('notes').value.trim()}}
+function num(id){const v=$(id).value;return v===''?null:Number(v)}
+function fillForm(r){fields.forEach(k=>{if(k==='symptom'||k==='pain')$(k).checked=!!r[k];else if(r[k]!==undefined&&r[k]!==null)$(k).value=r[k];else if(['hrv','rhr','sleep','notes'].includes(k))$(k).value=''});updateRangeLabels();$('saveBtn').textContent='変更を保存'}
+function clearForm(){editingDate=null;$('entryForm').reset();$('date').value=localDate();$('sleepQuality').value=3;$('fatigue').value=3;$('soreness').value=2;$('saveBtn').textContent='今日の記録を保存';updateRangeLabels();evaluate(getForm());}
+function updateRangeLabels(){['sleepQuality','fatigue','soreness'].forEach(id=>$(id+'Val').textContent=$(id).value+(id==='sleepQuality'?' / 5':' / 10'))}
+function evaluate(r){
+ let warn=[],good=[];
+ if(r.symptom)warn.push('体調不良のサイン');
+ if(r.pain)warn.push('いつもと違う痛み');
+ if(r.fatigue>=7)warn.push('疲労感が強い');
+ if(r.soreness>=7)warn.push('筋肉痛が強い');
+ if(r.sleep!==null&&r.sleep<5.5)warn.push('睡眠がかなり短い');
+ if(r.sleepQuality<=2)warn.push('睡眠の質が低い');
+ if(r.performance==='muchworse')warn.push('パフォーマンスが大きく低下');
+ else if(r.performance==='worse')warn.push('力が出にくい');
+ if(r.hrv!==null&&r.hrv>0){
+  const prev=Object.values(records).filter(x=>x.date<r.date&&x.hrv>0).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,7);
+  if(prev.length>=3){const avg=prev.reduce((s,x)=>s+x.hrv,0)/prev.length;if(r.hrv<avg*.8)warn.push('HRVが最近の平均より低い');else if(r.hrv>=avg*.95)good.push('HRVは最近の水準');}
+ }
+ if(r.rhr!==null){
+  const prev=Object.values(records).filter(x=>x.date<r.date&&x.rhr>0).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,7);
+  if(prev.length>=3){const avg=prev.reduce((s,x)=>s+x.rhr,0)/prev.length;if(r.rhr>=avg+7)warn.push('安静時心拍が最近より高い');else if(r.rhr<=avg+2)good.push('安静時心拍は最近の水準');}
+ }
+ if(r.sleep!==null&&r.sleep>=7)good.push('睡眠時間は確保できている');
+ if(r.fatigue<=3)good.push('疲労感は低め');
+ if(r.soreness<=3)good.push('筋肉痛は軽め');
+ let level='normal',title='通常メニュー',status='GO',reason='体感と記録の範囲では、いつものメニューを検討できそうです。ウォームアップで動きの軽さも確認しましょう。';
+ if(r.symptom||r.pain||r.fatigue>=8||r.performance==='muchworse'){level='rest';title='休養を優先';status='REST';reason='体調不良・普段と違う痛み・強い疲労などがあります。今日はトレーニングを休むか、痛みのない軽い活動にとどめましょう。';}
+ else if(warn.length>=2||r.fatigue>=6||r.soreness>=6||r.performance==='worse'){level='light';title='軽めに調整';status='EASY';reason='注意サインが見られます。重量・セット数を減らす、限界まで追い込まない、散歩やモビリティ中心にするなど調整を。';}
+ if(warn.length===0&&good.length===0)reason+=' HRVなどは単日の値だけで決めず、数日〜数週間の傾向で見ましょう。';
+ $('resultBox').className='result '+level;$('recommend').textContent=title;$('status').textContent=status;$('reason').textContent=reason;
+ $('positiveCount').textContent=good.length;$('warningCount').textContent=warn.length;
+ return {level,title,warn,good};
+}
+function render(){
+ const dates=Object.keys(records).sort().reverse();
+ $('todayPill').textContent=dates.length?`${dates.length}日分の記録`:'まずは今日から';
+ $('history').innerHTML='';
+ if(!dates.length)$('history').innerHTML='<div class="empty">まだ記録がありません。今日の状態を入力して保存しましょう。</div>';
+ dates.slice(0,20).forEach(d=>{const r=records[d],ev=evaluate(r);const div=document.createElement('div');div.className='historyrow';const left=document.createElement('div');const dt=document.createElement('div');dt.className='historydate';dt.textContent=d;const meta=document.createElement('div');meta.className='historymeta';meta.textContent=`疲労 ${r.fatigue}/10 ・ 筋肉痛 ${r.soreness}/10${r.sleep!==null?' ・ 睡眠 '+r.sleep+'h':''}`;left.append(dt,meta);const right=document.createElement('div');right.style.display='flex';right.style.alignItems='center';right.style.gap='8px';const tag=document.createElement('span');tag.className='tag '+ev.level;tag.textContent=ev.title;const edit=document.createElement('button');edit.className='ghost';edit.style.padding='7px 9px';edit.style.minHeight='34px';edit.style.fontSize='12px';edit.textContent='編集';edit.onclick=()=>{editingDate=d;fillForm(r);window.scrollTo({top:0,behavior:'smooth'})};right.append(tag,edit);div.append(left,right);$('history').append(div)});
+ drawChart();updateStreak();
+}
+function updateStreak(){let n=0,d=new Date();for(let i=0;i<365;i++){const k=localDate(d);if(records[k]){n++;d.setDate(d.getDate()-1)}else if(i===0){d.setDate(d.getDate()-1);if(records[localDate(d)]){n++;d.setDate(d.getDate()-1)}else break}else break}$('streak').textContent=n+'日'}
+function drawChart(){const svg=$('chart'),days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=localDate(d);days.push({date:k,label:(d.getMonth()+1)+'/'+d.getDate(),r:records[k]})}let s='';[0,5,10].forEach(v=>{const y=140-v*11.5;s+=`<line x1="30" y1="${y}" x2="330" y2="${y}" stroke="var(--line)" stroke-dasharray="3 4"/><text x="20" y="${y+4}" fill="var(--muted)" font-size="10" text-anchor="end">${v}</text>`});days.forEach((d,i)=>{const x=38+i*47; s+=`<text x="${x}" y="160" fill="var(--muted)" font-size="9" text-anchor="middle">${d.label}</text>`});[['fatigue','var(--green)'],['soreness','#d7a24b']].forEach(([key,color])=>{let pts=[];days.forEach((d,i)=>{if(d.r&&d.r[key]!==undefined){pts.push([38+i*47,140-d.r[key]*11.5])}});if(pts.length>1)s+=`<polyline points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;pts.forEach(([x,y])=>s+=`<circle cx="${x}" cy="${y}" r="3.5" fill="${color}"/>`)});svg.innerHTML=s}
+$('entryForm').addEventListener('submit',e=>{e.preventDefault();const r=getForm();if(!r.date)return;if(editingDate&&editingDate!==r.date)delete records[editingDate];records[r.date]=r;if(persist()){editingDate=null;render();evaluate(r);$('saveBtn').textContent='今日の記録を保存';alert('記録を保存しました');}});
+$('clearBtn').onclick=()=>clearForm();
+$('deleteAll').onclick=()=>{if(confirm('すべての記録をこのブラウザから削除します。よろしいですか？')){records={};persist();clearForm();render()}};
+['sleepQuality','fatigue','soreness'].forEach(id=>$(id).addEventListener('input',()=>{updateRangeLabels();evaluate(getForm())}));
+['hrv','rhr','sleep','performance','symptom','pain'].forEach(id=>$(id).addEventListener('change',()=>evaluate(getForm())));
+$('date').addEventListener('change',()=>{const d=$('date').value;if(records[d]){editingDate=d;fillForm(records[d])}else{editingDate=null;$('saveBtn').textContent='今日の記録を保存';evaluate(getForm())}});
+$('date').value=localDate();updateRangeLabels();render();evaluate(getForm());
+</script>
+</body>
+</html>
